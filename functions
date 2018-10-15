@@ -95,8 +95,8 @@ function main_list(){
         SECOND=`echo ${CHOICE} | cut -d'-' -f2`
         if [ ! -z ${FIRST} ] && [ ! -z ${SECOND} ] && [ ${FIRST} -le ${SECOND} ]; then
             if [ ${FIRST} -ge 1 ] && [ ${FIRST} -le ${LIST_SIZE} ] && [ ${SECOND} -ge 1 ] && [ ${SECOND} -le ${LIST_SIZE} ] ; then
-                for ((i=${FIRST};i<=${SECOND};i++));do
-                    ${FUNC_LIST[${i}]}
+                for ((FUNCS=${FIRST};FUNCS<=${SECOND};FUNCS++));do
+                    ${FUNC_LIST[${FUNCS}]}
                 done
             else
                 printWarn "Given value out of bounds!"
