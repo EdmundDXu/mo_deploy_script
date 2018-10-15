@@ -234,6 +234,10 @@ function pull_submodules(){
 function pull_docker_image(){
     printTitle "start pull docker images..." 
     docker pull ${DOCKER_IMAGE}
+	docker pull ${DOCKER_JOB_IMAGE}
+	docker pull ${DOCKER_JOB_GPU_IMAGE}
+	docker pull ${DOCKER_FAAS_PYTHON3_IMAGE}
+	docker pull ${DOCKER_CELERY_APP_IMAGE}
     printTitle "pull complete..."
 }
 
