@@ -2,3 +2,5 @@ backup/
 deploy.conf
 pip_error.log
 test/
+proxy_function.sh
+test.sh
