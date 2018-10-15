@@ -73,14 +73,14 @@ function main_list(){
     printList " 4. pull docker image"
     printList " 5. install python packages"
     printList " 6. compile jupyterlab packages"
-    printList " 7. install and build node packages"
-    printList " 8. install and build moduleList packages"
+    printList " 7. install and build web packages"
+    printList " 8. install and build sub-webpage packages"
     printList " 9. restart run and jupyterhub process"
     printList " 10. exit"
     printWarn "Please choice some number to execute separated by spaces Or use continuous intervals separated by dash like(1-3)"
     echo -e "${TEXT}--------------------------------------------${END}\n"
     
-    FUNC_LIST=("" "pull_mo" "pull_submodules" "modify_config_files" "pull_docker_image" "install_python_packages" "compile_jupyterlab_packages" "install_and_build_node_packages" "install_and_build_moduleList_packages"  "restart_run_and_jupyterhub_process")
+    FUNC_LIST=("" "pull_mo" "pull_submodules" "modify_config_files" "pull_docker_image" "install_python_packages" "compile_jupyterlab_packages" "install_and_build_web_packages" "install_and_build_subwebpage_packages"  "restart_run_and_jupyterhub_process")
 
     declare -i LIST_SIZE=${#FUNC_LIST[@]}-1
     read CHOICE
@@ -262,8 +262,8 @@ function compile_jupyterlab_packages(){
     printTitle "compile jupyterlab packages complete..."
 }
 
-function install_and_build_node_packages(){
-    printTitle "start install and build node packages..."
+function install_and_build_web_packages(){
+    printTitle "start install and build web packages..."
     cd ${MO_HOME}/frontend/
     npm install
     if ! npm run build; then
@@ -272,7 +272,12 @@ function install_and_build_node_packages(){
             exit 3
         fi
     fi
-    printTitle "install and build node packages complete..."
+    printTitle "install and build web packages complete..."
+}
+
+function install_and_build_subwebpage_packages(){
+    install_and_build_moduleList_packages
+    install_and_build_shareH5_packages
 }
 
 function install_and_build_moduleList_packages(){
@@ -286,6 +291,19 @@ function install_and_build_moduleList_packages(){
         fi
     fi
     printTitle "install and build moduleList packages complete..."
+}
+
+function install_and_build_shareH5_packages(){
+    printTitle "start install and build shareH5 packages..."
+    cd ${MO_HOME}/frontend/shareH5
+    npm install
+    if ! npm run build; then
+        printWarn "Failed to compile."
+        if ! readYN "Whether to continue?(Y/n) "; then
+            exit 3
+        fi
+    fi
+    printTitle "install and build shareH5 packages complete..."
 }
 
 function restart_run_and_jupyterhub_process(){
