@@ -260,7 +260,7 @@ function compile_jupyterlab_packages(){
     cd ${MO_HOME}/frontend/src/packages/jupyterlab_package/packages/
     for d in ./*/ ; do 
 	cd "$d"
-	tsc &> /dev/null &
+	tsc 2> /home/admin/script/tsc.log &
 	echo "$(basename $(pwd))"
 	cd -
     done
