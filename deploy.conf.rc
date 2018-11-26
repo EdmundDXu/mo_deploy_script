@@ -1,6 +1,7 @@
 MO_HOME="/home/admin/www/mo_prod"
 CONSTANTSPY="${MO_HOME}/pyserver/server3/constants.py"
 CONFIGJS="${MO_HOME}/frontend/config.js"
+CONSTANTSJS="${MO_HOME}/frontend/src/constants.js"
 CONFIGINI="${MO_HOME}/pyserver/server3/repository/config.ini"
 INITPY="${MO_HOME}/pyserver/functions/template/python3/function/modules/__init__.py"
 REQUIREMENTSTXT="${MO_HOME}/pyserver/requirements.txt"
