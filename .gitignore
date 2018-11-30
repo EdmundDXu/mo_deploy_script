@@ -5,3 +5,4 @@ test/
 proxy_function.sh
 test.sh
 tsc.log
+tsc.error
