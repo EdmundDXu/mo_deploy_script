@@ -5,7 +5,6 @@
 [ -f functions ] && . functions
 
 init
-while true; do
-	main_list
-done
-
+#while true; do
+#	main_list
+#done
