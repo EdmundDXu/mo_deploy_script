@@ -4,8 +4,8 @@ function disk_report(){
 
 	for ((i=1;i<=$#;i++)); do
     	Disk=${!i}
-    	Space=`df -h ${Disk} | tail -1 | awk '{print $4;}'`
-    	MountPoint=`df -h ${Disk} | tail -1 | awk '{print $6;}'`
+    	Space=`sudo df -h ${Disk} | tail -1 | awk '{print $4;}'`
+    	MountPoint=`sudo df -h ${Disk} | tail -1 | awk '{print $6;}'`
     	Content="${Content}\n${Disk} mount on ${MountPoint} remains ${Space}!"
 	done
 

@@ -9,9 +9,9 @@ function disk_poor(){
     
     for ((i=1;i<=$#;i++)); do
     	Disk=${!i}
-    	Space=`df -l ${Disk} | tail -1 | awk '{print $4;}'`
-	Space=`echo "${Space}/1048576" | bc`
-        MountPoint=`df -h ${Disk} | tail -1 | awk '{print $6;}'`
+    	Space=`sudo df -l ${Disk} | tail -1 | awk '{print $4;}'`
+		Space=`echo "${Space}/1048576" | bc`
+        MountPoint=`sudo df -h ${Disk} | tail -1 | awk '{print $6;}'`
 	
     	if [ `echo "${Space}<5" | bc` -eq 1 ]; then
 	    Content="${Content}\n${Disk} mount on ${MountPoint} remains ${Space} G!"
