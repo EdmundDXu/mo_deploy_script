@@ -281,6 +281,7 @@ function install_and_build_web_packages(){
     printTitle "start install and build web packages..."
     cd ${MO_HOME}/frontend/
     npm install
+    rm -rf /home/admin/www/mo_prod/frontend/node_modules/@types/bluebird
     if ! npm run build; then
         printWarn "Failed to compile."
         if ! readYN "Whether to continue?(Y/n) "; then
