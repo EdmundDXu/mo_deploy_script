@@ -1,7 +1,7 @@
 import os
 from qiniu import Auth, put_file, etag
 import qiniu.config
-from qiniu import BucketManager
+from qiniu import BucketManager, build_batch_delete
 
 
 # 需要填写你的 Access Key 和 Secret Key
@@ -23,9 +23,10 @@ def delete_all_file():
     pprint([e['key'] for e in ret['items']])
     keys = [e['key'] for e in ret['items']]
     ops = build_batch_delete(bucket_name, keys)
+    ret, info = bucket.batch(ops)
 
 def upload_file():
-    directory="/home/admin/www/mo_prod/frontend/dist"
+    directory="/home/admin/www/mo_prod/frontend/dist/"
     file_set = set()
 
     for dir_, _, files in os.walk(directory):
@@ -35,9 +36,11 @@ def upload_file():
             file_set.add(rel_file)
 
     for file_ in file_set:
-        print(file_.split("./")[-1])
-        # token = q.upload_token(bucket_name, file_, 3600)
-        # return put_file(token, key, localfile)
+        #print(file_.split("./")[-1])
+        token = q.upload_token(bucket_name, file_.split("./")[-1], 3600)
+        put_file(token, file_.split("./")[-1], directory + file_.split("./")[-1])
 
+print("delete all files on oss")
 delete_all_file()
+print("upload static files to oss")
 upload_file()

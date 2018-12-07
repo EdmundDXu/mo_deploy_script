@@ -76,8 +76,8 @@ function main_list(){
     printList " 7. install and build web packages"
     printList " 8. install and build sub-webpage packages"
     printList " 9. restart jupyterhub and socketio"
-    printList " 11. upload files to oss"
-    printList " 12. exit"
+    printList " 10. upload files to oss"
+    printList " 11. exit"
     printWarn "Please choice some number to execute separated by spaces Or use continuous intervals separated by dash like(1-3)"
     echo -e "${TEXT}--------------------------------------------${END}\n"
     
@@ -359,7 +359,7 @@ function restart_jupyterhub_and_socketio(){
 	sudo systemctl reload nginx
 }
 
-function upload_fils_to_oss(){
+function upload_files_to_oss(){
     printList "upload files to oss..." 
    	/home/admin/.virtualenvs/moenv/bin/python oss_business.py
     printList "upload files to oss complete" 
