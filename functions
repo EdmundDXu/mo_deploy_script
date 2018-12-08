@@ -42,6 +42,7 @@ function printTitle(){
 function init(){
     # default configuration
     DEFAULT_CONFIG_FILE="deploy.conf"
+	SCRIPT_DIR="`pwd`"
 
     # import user's configuration to overwrite default configuration
     while getopts "c:" arg # 读取命令行选项和参数
@@ -223,6 +224,7 @@ function modify_config_files(){
 function pull_submodules(){
     printTitle "start pull jupyterhub..."
     cd ${MO_HOME}/pyserver/jupyterhub
+	git checkout develop
     git pull
     printTitle "pull jupyterhub complete..."
 
@@ -368,7 +370,7 @@ function restart_apps(){
 
 function upload_files_to_oss(){
     printList "upload files to oss..." 
-   	/home/admin/.virtualenvs/moenv/bin/python oss_business.py
+   	echo "/home/admin/.virtualenvs/moenv/bin/python ${SCRIPT_DIR}/oss_business.py"
     printList "upload files to oss complete" 
 }
 
