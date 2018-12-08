@@ -42,6 +42,7 @@ function printTitle(){
 function init(){
     # default configuration
     DEFAULT_CONFIG_FILE="deploy.conf"
+    SCRIPT_DIR="`pwd`"
 
     # import user's configuration to overwrite default configuration
     while getopts "c:" arg # 读取命令行选项和参数
