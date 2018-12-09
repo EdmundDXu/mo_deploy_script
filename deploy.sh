@@ -8,4 +8,3 @@ init
 while true; do
 	main_list
 done
-
