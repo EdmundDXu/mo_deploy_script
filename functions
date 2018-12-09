@@ -226,6 +226,9 @@ function pull_submodules(){
     cd ${MO_HOME}/pyserver/jupyterhub
 	git checkout develop
     git pull
+	git checkout master
+	git merge develop
+	git push
     printTitle "pull jupyterhub complete..."
 
     printTitle "start pull jupyterlab-monaco..."
@@ -370,7 +373,7 @@ function restart_apps(){
 
 function upload_files_to_oss(){
     printList "upload files to oss..." 
-   	echo "/home/admin/.virtualenvs/moenv/bin/python ${SCRIPT_DIR}/oss_business.py"
+   	/home/admin/.virtualenvs/moenv/bin/python ${SCRIPT_DIR}/oss_business.py
     printList "upload files to oss complete" 
 }
 
