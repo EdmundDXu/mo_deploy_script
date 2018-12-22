@@ -269,6 +269,7 @@ function install_python_packages(){
 function compile_jupyterlab_packages(){
     printTitle "start compile jupyterlab packages..."
     cd ${MO_HOME}/frontend/src/packages/jupyterlab_package/packages/
+    echo -n > /home/admin/script/tsc.error
     for d in ./*/ ; do 
 	cd "$d"
 	tsc &>> /home/admin/script/tsc.error &
@@ -302,12 +303,20 @@ function install_and_build_web_packages(){
     cd ${MO_HOME}/frontend/
     npm install
     rm -rf /home/admin/www/mo_prod/frontend/node_modules/@types/bluebird
+	printWarn "##################umount all nfs########################"
+	sudo umount -f /home/admin/www/mo_prod/pyserver/server3/lib/modules
+    sudo umount -f /home/admin/www/mo_prod/pyserver/datasets
+    sudo umount -f /home/admin/www/mo_prod/pyserver/functions
+    sudo umount -f /home/admin/www/mo_prod/pyserver/job_staging
+    sudo umount -f /home/admin/www/mo_prod/pyserver/user_directory
     if ! npm run build; then
         printWarn "Failed to compile."
         if ! readYN "Whether to continue?(Y/n) "; then
             exit 3
         fi
     fi
+    printWarn "##################mount all nfs########################"
+	sudo mount -a
 	printList "copy ${WEB_ROOT}/index.html to ${WEB_ROOT_TMP}"
 	[ ! -d ${WEB_ROOT_TMP} ] && mkdir -p ${WEB_ROOT_TMP}
 	cp -a ${WEB_ROOT}/index.html ${WEB_ROOT_TMP}
