@@ -298,9 +298,6 @@ function install_and_build_web_packages(){
             exit 3
         fi
     fi
-	printList "copy ${WEB_ROOT}/index.html to ${WEB_ROOT_TMP}"
-	[ ! -d ${WEB_ROOT_TMP} ] && mkdir -p ${WEB_ROOT_TMP}
-	cp -a ${WEB_ROOT}/index.html ${WEB_ROOT_TMP}
     printTitle "install and build web packages complete..."
 }
 
