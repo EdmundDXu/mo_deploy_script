@@ -71,18 +71,18 @@ function main_list(){
     printList " 1. pull mo"
     printList " 2. pull submodules"
     printList " 3. modify configuration file"
-    printList " 4. pull docker image"
-    printList " 5. install python packages"
-    printList " 6. compile jupyterlab packages"
-    printList " 7. install and build web packages"
-    printList " 8. install and build sub-webpage packages"
-    printList " 9. restart apps"
-    printList " 10. refresh version number"
+    printList " 4. refresh version number"
+    printList " 5. pull docker image"
+    printList " 6. install python packages"
+    printList " 7. compile jupyterlab packages"
+    printList " 8. install and build web packages"
+    printList " 9. install and build sub-webpage packages"
+    printList " 10. restart apps"
     printList " 11. exit"
     printWarn "Please choice some number to execute separated by spaces Or use continuous intervals separated by dash like(1-3)"
     echo -e "${TEXT}--------------------------------------------${END}\n"
     
-    FUNC_LIST=("" "pull_mo" "pull_submodules" "modify_config_files" "pull_docker_image" "install_python_packages" "compile_jupyterlab_packages" "install_and_build_web_packages" "install_and_build_subwebpage_packages" "restart_apps" "refresh_version_number")
+    FUNC_LIST=("" "pull_mo" "pull_submodules" "modify_config_files" "refresh_version_number" "pull_docker_image" "install_python_packages" "compile_jupyterlab_packages" "install_and_build_web_packages" "install_and_build_subwebpage_packages" "restart_apps" )
 
     declare -i LIST_SIZE=${#FUNC_LIST[@]}-1
     read CHOICE
@@ -224,11 +224,8 @@ function modify_config_files(){
 function pull_submodules(){
     printTitle "start pull jupyterhub..."
     cd ${MO_HOME}/pyserver/jupyterhub
-	git checkout develop
+    git checkout develop
     git pull
-	git checkout master
-	git merge develop
-	git push
     printTitle "pull jupyterhub complete..."
 
     printTitle "start pull jupyterlab-monaco..."
@@ -269,6 +266,7 @@ function install_python_packages(){
 function compile_jupyterlab_packages(){
     printTitle "start compile jupyterlab packages..."
     cd ${MO_HOME}/frontend/src/packages/jupyterlab_package/packages/
+    echo -n > /home/admin/script/tsc.error
     for d in ./*/ ; do 
 	cd "$d"
 	tsc &>> /home/admin/script/tsc.error &
@@ -298,9 +296,6 @@ function install_and_build_web_packages(){
             exit 3
         fi
     fi
-	printList "copy ${WEB_ROOT}/index.html to ${WEB_ROOT_TMP}"
-	[ ! -d ${WEB_ROOT_TMP} ] && mkdir -p ${WEB_ROOT_TMP}
-	cp -a ${WEB_ROOT}/index.html ${WEB_ROOT_TMP}
     printTitle "install and build web packages complete..."
 }
 
@@ -362,11 +357,12 @@ function upload_files_to_oss(){
 
 function refresh_version_number(){
     printList "refresh version number..." 
+#    echo "delete this line to enable refresh version number" && return 0
     branch_name="$(cd ${MO_HOME};git symbolic-ref HEAD 2>/dev/null)" || branch_name="(unnamed branch)"     # detached HEAD
     branch_name=${branch_name##refs/heads/}
     echo ${branch_name}
-    echo ${branch_name} | sed 's/release-/Beta v/' | cut -d '.' -f 1,2
-    version_number=`echo ${branch_name} | sed 's/release-/Beta v/' | cut -d '.' -f 1,2`
+    echo ${branch_name} | sed 's/release-/v/' | cut -d '.' -f 1,2,3
+    version_number=`echo ${branch_name} | sed 's/release-/v/' | cut -d '.' -f 1,2,3`
     echo ${CONSTANTSJS}
     if grep "betaVersion" ${CONSTANTSJS} &> /dev/null ; then
         if ! grep "^[[:space:]]*betaVersion[[:space:]]*:[[:space:]]*'${version_number}'.*" ${CONSTANTSJS} &> /dev/null; then
