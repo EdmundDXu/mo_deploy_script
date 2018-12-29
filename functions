@@ -227,6 +227,7 @@ function pull_submodules(){
 	git checkout develop
     git pull
 	git checkout master
+	git pull
 	git merge develop
 	git push
     printTitle "pull jupyterhub complete..."
@@ -308,7 +309,7 @@ function install_and_build_web_packages(){
     sudo umount -f /home/admin/www/mo_prod/pyserver/datasets
     sudo umount -f /home/admin/www/mo_prod/pyserver/functions
     sudo umount -f /home/admin/www/mo_prod/pyserver/job_staging
-    sudo umount -f /home/admin/www/mo_prod/pyserver/user_directory
+    sudo umount -f /home/admin/www/mo_prod/pyserver/user_directory || sudo umount -l /home/admin/www/mo_prod/pyserver/user_directory 
     if ! npm run build; then
         printWarn "Failed to compile."
         if ! readYN "Whether to continue?(Y/n) "; then
