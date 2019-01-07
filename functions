@@ -225,6 +225,10 @@ function pull_submodules(){
     cd ${MO_HOME}/pyserver/jupyterhub
     git checkout develop
     git pull
+    git checkout master
+    git pull
+    git merge develop
+    git push
     printTitle "pull jupyterhub complete..."
 
     printTitle "start pull jupyterlab-monaco..."
@@ -289,6 +293,7 @@ function install_and_build_web_packages(){
     cd ${MO_HOME}/frontend/
     npm install
     rm -rf /home/admin/www/mo_prod/frontend/node_modules/@types/bluebird
+    printWarn "##################umount all nfs########################"
     sudo umount -f /home/admin/www/mo_prod/pyserver/server3/lib/modules
     sudo umount -f /home/admin/www/mo_prod/pyserver/datasets
     sudo umount -f /home/admin/www/mo_prod/pyserver/functions
@@ -300,6 +305,7 @@ function install_and_build_web_packages(){
             exit 3
         fi
     fi
+    printWarn "##################mount all nfs########################"
     sudo mount -a
     printTitle "install and build web packages complete..."
 }

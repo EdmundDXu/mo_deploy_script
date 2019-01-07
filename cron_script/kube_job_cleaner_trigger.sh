@@ -6,4 +6,5 @@ if [ ${PODS_NUM} -gt 170 ]; then
         `echo -e production has more then ${PODS_NUM} pods, start clean old pods`
 EOF
 	/home/admin/.virtualenvs/moenv/bin/python /home/admin/www/mo_prod/pyserver/kube_job_cleaner_trigger.py
+    /home/admin/script/cron_script/kube_pods_cleaner.sh
 fi
