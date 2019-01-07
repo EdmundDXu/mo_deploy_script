@@ -124,7 +124,6 @@ function main_list(){
 function pull_mo(){
     printTitle "pull mo..."
     cd ${MO_HOME}
-    git checkout ${GIT_BRANCH}
     if ! git pull; then
         printWarn "git pull seems to have problems, please fix it manually..."
         exit 4
@@ -290,12 +289,18 @@ function install_and_build_web_packages(){
     cd ${MO_HOME}/frontend/
     npm install
     rm -rf /home/admin/www/mo_prod/frontend/node_modules/@types/bluebird
+    sudo umount -f /home/admin/www/mo_prod/pyserver/server3/lib/modules
+    sudo umount -f /home/admin/www/mo_prod/pyserver/datasets
+    sudo umount -f /home/admin/www/mo_prod/pyserver/functions
+    sudo umount -f /home/admin/www/mo_prod/pyserver/job_staging
+    sudo umount -f /home/admin/www/mo_prod/pyserver/user_directory || sudo umount -l /home/admin/www/mo_prod/pyserver/user_directory 
     if ! npm run build; then
         printWarn "Failed to compile."
         if ! readYN "Whether to continue?(Y/n) "; then
             exit 3
         fi
     fi
+    sudo mount -a
     printTitle "install and build web packages complete..."
 }
 
@@ -317,6 +322,14 @@ function install_and_build_moduleList_packages(){
 }
 
 function restart_apps(){
+    printWarn "stopping run..." 
+    if pm2 stop run && sudo fuser -k 5005/tcp; then
+        printWarn "Successfully stopped run..."
+    else
+        printWarn "Failed to stop run..."
+    fi
+    println
+
     printWarn "stopping jupyterhub..." 
     if sudo supervisorctl stop jupyterhub && sudo pkill node; then
         printWarn "Successfully stopped jupyterhub..."
@@ -340,9 +353,13 @@ function restart_apps(){
     #fi
     #println
 
+    printWarn "start run..."
+    pm2 start run && printWarn "Successfully start run..." || printWarn "Failed to start run..."
+
     printWarn "start jupyterhub..."
-    printWarn "start socketio..."
     sudo supervisorctl start jupyterhub && printWarn "Successfully start jupyterhub..." || printWarn "Failed to start jupyterhub..."
+
+    printWarn "start socketio..."
     sudo supervisorctl start run_socketio && printWarn "Successfully start run_socketio..." || printWarn "Failed to start run_socketio..."
     sudo supervisorctl restart klaus && printWarn "Successfully start klaus..." || printWarn "Failed to start klaus..."
     sudo supervisorctl restart elasticsearch && printWarn "Successfully start elasticsearch..." || printWarn "Failed to start elasticsearch..."
