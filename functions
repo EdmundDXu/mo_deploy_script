@@ -321,6 +321,13 @@ function install_and_build_web_packages(){
 	printList "copy ${WEB_ROOT}/index.html to ${WEB_ROOT_TMP}"
 	[ ! -d ${WEB_ROOT_TMP} ] && mkdir -p ${WEB_ROOT_TMP}
 	cp -a ${WEB_ROOT}/index.html ${WEB_ROOT_TMP}
+
+	printWarn "change nginx web root back to ${WEB_ROOT}"
+    sudo sed -i "s@^[^#]\([[:space:]]*root[[:space:]]*${WEB_ROOT_TMP}\)@#\1@" ${NGINX_CONF}
+    sudo sed -i "s@^#\([[:space:]]*root[[:space:]]*${WEB_ROOT}\)@\1@" ${NGINX_CONF}
+    cat ${NGINX_CONF} | grep ${WEB_ROOT}
+    cat ${NGINX_CONF} | grep ${WEB_ROOT_TMP}
+	sudo systemctl reload nginx
     printTitle "install and build web packages complete..."
 }
 
@@ -373,12 +380,6 @@ function restart_apps(){
     sudo supervisorctl restart elasticsearch && printWarn "Successfully start elasticsearch..." || printWarn "Failed to start elasticsearch..."
     println
 
-	printWarn "change nginx web root back to ${WEB_ROOT}"
-    sudo sed -i "s@^[^#]\([[:space:]]*root[[:space:]]*${WEB_ROOT_TMP}\)@#\1@" ${NGINX_CONF}
-    sudo sed -i "s@^#\([[:space:]]*root[[:space:]]*${WEB_ROOT}\)@\1@" ${NGINX_CONF}
-    cat ${NGINX_CONF} | grep ${WEB_ROOT}
-    cat ${NGINX_CONF} | grep ${WEB_ROOT_TMP}
-	sudo systemctl reload nginx
 }
 
 function upload_files_to_oss(){
