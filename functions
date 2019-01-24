@@ -350,7 +350,12 @@ function install_and_build_moduleList_packages(){
 
 function restart_apps(){
     printWarn "stopping jupyterhub..." 
-    if sudo supervisorctl stop jupyterhub && sudo pkill node; then
+    if sudo supervisorctl stop jupyterhub ; then
+		jupyterhub_ports=( "8000" "8001" "8111" "8222" "8333" "8444" )
+        for port in ${jupyterhub_ports[@]}; do
+            sudo fuser -k ${port}/tcp
+            echo "sudo fuser -k ${port}/tcp"
+        done
         printWarn "Successfully stopped jupyterhub..."
     else
         printWarn "Failed to stop jupyterhub..."
