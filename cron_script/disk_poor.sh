@@ -16,16 +16,16 @@ function disk_poor(){
     	if [ `echo "${Space}<5" | bc` -eq 1 ]; then
 	    Content="${Content}\n${Disk} mount on ${MountPoint} remains ${Space} G!"
     	else
-	    echo "remain ${Space} G"
+	    echo "remain ${Space} G" &> /dev/null
     	fi
     done
 
     if [ ! -z "${Content}" ]; then
-	mailx -v -s 'disk space warning' edmunddxu@outlook.com c.lee@livemail.tw << EOF
+	mailx -v -s 'mo disk space warning' edmunddxu@outlook.com c.lee@livemail.tw &> /dev/null << EOF
 `echo -e ${Content}`
 EOF
     fi
-    echo -e ${Content}
+#    echo -e ${Content}
 }
 disk_poor /dev/nvme0n1p2 /dev/nvme0n1p5 /dev/vdb1 /dev/mapper/docker_VG-docker_LV /dev/vda2
 
