@@ -383,6 +383,10 @@ function restart_apps(){
     sudo supervisorctl start run_socketio && printWarn "Successfully start run_socketio..." || printWarn "Failed to start run_socketio..."
     sudo supervisorctl restart klaus && printWarn "Successfully start klaus..." || printWarn "Failed to start klaus..."
     sudo supervisorctl restart elasticsearch && printWarn "Successfully start elasticsearch..." || printWarn "Failed to start elasticsearch..."
+    sudo supervisorctl restart email_sender && printWarn "Successfully start email_sender..." || printWarn "Failed to start email_sender..."
+    sudo supervisorctl restart kube_job_cleaner && printWarn "Successfully start kube_job_cleaner..." || printWarn "Failed to start kube_job_cleaner..."
+    sudo supervisorctl restart pods_cleaner && printWarn "Successfully start pods_cleaner..." || printWarn "Failed to start pods_cleaner..."
+    sudo supervisorctl restart temp_user_creator && printWarn "Successfully start temp_user_creator..." || printWarn "Failed to start temp_user_creator..."
     println
 
 }
