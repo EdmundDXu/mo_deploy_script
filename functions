@@ -231,10 +231,10 @@ function pull_submodules(){
     git push
     printTitle "pull jupyterhub complete..."
 
-    printTitle "start pull jupyterlab-monaco..."
-    cd ${MO_HOME}/frontend/src/packages/jupyterlab_package/packages/jupyterlab-monaco
+    printTitle "start pull monaco..."
+    cd ${MO_HOME}/frontend/src/packages/jupyterlab_package/packages/monaco
     git pull
-    printTitle "pull jupyterlab-monaco complete..."
+    printTitle "pull monaco complete..."
 
     printTitle "start pull klaus"
     cd ${KLAUS_HOME}
@@ -268,6 +268,8 @@ function install_python_packages(){
 
 function compile_jupyterlab_packages(){
     printTitle "start compile jupyterlab packages..."
+    #需要启动tsc时注释掉return
+    return 0
     cd ${MO_HOME}/frontend/src/packages/jupyterlab_package/packages/
     echo -n > /home/admin/script/tsc.error
     for d in ./*/ ; do 
