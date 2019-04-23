@@ -25,7 +25,7 @@ function disk_poor(){
 `echo -e ${Content}`
 EOF
     fi
-#    echo -e ${Content}
+    echo -e ${Content}
 }
 disk_poor /dev/nvme0n1p2 /dev/nvme0n1p5 /dev/vdb1 /dev/mapper/docker_VG-docker_LV /dev/vda2
 
