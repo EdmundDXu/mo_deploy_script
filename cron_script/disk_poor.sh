@@ -21,7 +21,7 @@ function disk_poor(){
     done
 
     if [ ! -z "${Content}" ]; then
-	mailx -v -s 'mo disk space warning' edmunddxu@outlook.com c.lee@livemail.tw &> /dev/null << EOF
+	mailx -v -s 'mo disk space warning' edmunddxu@outlook.com c.lee@livemail.tw lzfxxx@gmail.com &> /dev/null << EOF
 `echo -e ${Content}`
 EOF
     fi

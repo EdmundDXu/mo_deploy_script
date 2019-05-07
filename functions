@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 
+#打印不同颜色的输出文字
 WARN="\033[37;33m"
 TITLE="\033[37;36m"
 TEXT="\033[32;38m"
@@ -38,7 +39,7 @@ function printTitle(){
 }
 
 
-
+# 一些脚本的初始化所需的操作
 function init(){
     # default configuration
     DEFAULT_CONFIG_FILE="deploy.conf"
@@ -65,6 +66,7 @@ function init(){
     fi
 }
 
+# 脚本的主菜单
 function main_list(){
     echo -e "${TEXT}--------------------------------------------${END}"
     printList " 0. Execute all scripts"
@@ -121,6 +123,7 @@ function main_list(){
 
 }
 
+# 拉取项目代码
 function pull_mo(){
     printTitle "pull mo..."
     cd ${MO_HOME}
@@ -131,6 +134,7 @@ function pull_mo(){
     fi
 }
 
+# 修改配置文件内容
 function modify_config_files(){
     # modify constants.py
     printTitle "modify constants.py"
@@ -221,6 +225,7 @@ function modify_config_files(){
     printText "`cat ${JUPYTERHUBCONFIGPY} | grep -C 5 ${ENV}`"
 }
 
+# 拉取submodules代码
 function pull_submodules(){
     printTitle "start pull jupyterhub..."
     cd ${MO_HOME}/pyserver/jupyterhub
@@ -243,6 +248,7 @@ function pull_submodules(){
     printTitle "pull klaus complete"
 }
 
+# 拉取docker image
 function pull_docker_image(){
     printTitle "start pull docker images..." 
     docker pull ${DOCKER_IMAGE}
@@ -253,6 +259,7 @@ function pull_docker_image(){
     printTitle "pull complete..."
 }
 
+# 安装requirement.txt文件中的python包
 function install_python_packages(){
     printTitle "start install python packages..."
     # venvwrapper
@@ -267,6 +274,7 @@ function install_python_packages(){
     printTitle "install complete..."
 }
 
+# 并发编译jupyterlab_packages中的模块
 function compile_jupyterlab_packages(){
     printTitle "start compile jupyterlab packages..."
     cd ${MO_HOME}/frontend/src/packages/jupyterlab_package/packages/
@@ -289,9 +297,11 @@ function compile_jupyterlab_packages(){
     printTitle "compile jupyterlab packages complete..."
 }
 
+#安装package.json中的包，并且编译前端项目
 function install_and_build_web_packages(){
     printTitle "start install and build web packages..."
 	printWarn "change nginx web root to ${WEB_ROOT_TMP}"
+#为了保证在npm run build的过程中前端仍然可用，将之前的index.html复制到临时目录，并且将nginx的root指向临时目录
 	if [ -f ${WEB_ROOT_TMP}/index.html ]; then
 		sudo sed -i "s@^[^#]\([[:space:]]*root[[:space:]]*${WEB_ROOT}\)@#\1@" ${NGINX_CONF}
 		sudo sed -i "s@^#\([[:space:]]*root[[:space:]]*${WEB_ROOT_TMP}\)@\1@" ${NGINX_CONF}
@@ -304,6 +314,7 @@ function install_and_build_web_packages(){
     cd ${MO_HOME}/frontend/
     npm install
     rm -rf /home/admin/www/mo_prod/frontend/node_modules/@types/bluebird
+#由于NFS会对npm run build产生影响，所以需要先将其卸载
 	printWarn "##################umount all nfs########################"
 	sudo umount -f /home/admin/www/mo_prod/pyserver/server3/lib/modules
     sudo umount -f /home/admin/www/mo_prod/pyserver/datasets
@@ -317,11 +328,12 @@ function install_and_build_web_packages(){
         fi
     fi
     printWarn "##################mount all nfs########################"
+#重新挂载NFS
 	sudo mount -a
 	printList "copy ${WEB_ROOT}/index.html to ${WEB_ROOT_TMP}"
 	[ ! -d ${WEB_ROOT_TMP} ] && mkdir -p ${WEB_ROOT_TMP}
 	cp -a ${WEB_ROOT}/index.html ${WEB_ROOT_TMP}
-
+#在build结束后，将nginx的root指回原来的web根目录
 	printWarn "change nginx web root back to ${WEB_ROOT}"
     sudo sed -i "s@^[^#]\([[:space:]]*root[[:space:]]*${WEB_ROOT_TMP}\)@#\1@" ${NGINX_CONF}
     sudo sed -i "s@^#\([[:space:]]*root[[:space:]]*${WEB_ROOT}\)@\1@" ${NGINX_CONF}
@@ -348,6 +360,7 @@ function install_and_build_moduleList_packages(){
     printTitle "install and build moduleList packages complete..."
 }
 
+#重启所有的服务，由于某些服务无法通过supervisor真正关闭，故先将其从supervisor中关闭，然后将其进程杀死
 function restart_apps(){
     printWarn "stopping jupyterhub..." 
     if sudo supervisorctl stop jupyterhub ; then
@@ -391,12 +404,14 @@ function restart_apps(){
 
 }
 
+# 将前端编译出来的文件上传至oss，除了index.html之外的文件。
 function upload_files_to_oss(){
     printList "upload files to oss..." 
    	/home/admin/.virtualenvs/moenv/bin/python ${SCRIPT_DIR}/oss_business.py
     printList "upload files to oss complete" 
 }
 
+# 根据分支名称更新配置文件中的版本号，需要分支名称为release-x.x.x
 function refresh_version_number(){
     printList "refresh version number..." 
     branch_name="$(cd ${MO_HOME};git symbolic-ref HEAD 2>/dev/null)" || branch_name="(unnamed branch)"     # detached HEAD
