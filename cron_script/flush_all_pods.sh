@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+
 for pods in `kubectl get pods -l app=jupyterhub -o name`; do
     kubectl delete ${pods} &
 done

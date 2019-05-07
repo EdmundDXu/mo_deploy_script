@@ -16,12 +16,12 @@ function disk_poor(){
     	if [ `echo "${Space}<5" | bc` -eq 1 ]; then
 	    Content="${Content}\n${Disk} mount on ${MountPoint} remains ${Space} G!"
     	else
-	    echo "remain ${Space} G"
+	    echo "remain ${Space} G" &> /dev/null
     	fi
     done
 
     if [ ! -z "${Content}" ]; then
-	mailx -v -s 'disk space warning' edmunddxu@outlook.com c.lee@livemail.tw << EOF
+	mailx -v -s 'mo disk space warning' edmunddxu@outlook.com c.lee@livemail.tw lzfxxx@gmail.com &> /dev/null << EOF
 `echo -e ${Content}`
 EOF
     fi
