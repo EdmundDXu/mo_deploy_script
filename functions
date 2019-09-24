@@ -76,7 +76,7 @@ function main_list(){
     printList " 4. refresh version number"
     printList " 5. pull docker image"
     printList " 6. install python packages"
-    printList " 7. compile jupyterlab packages"
+ #    printList " 7. compile jupyterlab packages"
     printList " 8. install and build web packages"
     printList " 9. install and build sub-webpage packages"
     printList " 10. restart apps"
@@ -222,6 +222,20 @@ function modify_config_files(){
 
     printTitle "modify result"
     printText "`cat ${JUPYTERHUBCONFIGPY} | grep -C 5 ${ENV}`"
+	# modify request.ts
+	printTitle "modify request.ts"
+	# 将其他没被注释的ENV注释起来
+	sed -i "s@^export[[:space:]]const[[:space:]]conf@// export const conf@i" ${REQUESTTS}
+
+	# 将# ENV = '${OS}'的注释去掉
+	sed -i "s/\/\/ export const conf = basicConf.${ENV};/export const conf = basicConf.${ENV};/g" ${REQUESTTS}
+	# 如果没有抓取到basicConf.'${ENV}'
+	if ! grep "basicConf.${ENV}" ${REQUESTTS} &>> /dev/null; then
+	# 就报错并退出程序
+			echo "can't find basicConf.${ENV} in ${REQUESTTS}"
+			exit 2
+	fi
+
 }
 
 # 拉取submodules代码
