@@ -9,7 +9,7 @@ function disk_report(){
     	Content="${Content}\n${Disk} mount on ${MountPoint} remains ${Space}!"
 	done
 
-	mailx -v -s 'mo disk space report' edmunddxu@outlook.com c.lee@livemail.tw << EOF
+	mailx -v -s 'mo disk space report' c.lee@livemail.tw lzfxxx@gmail.com<< EOF
 	`echo -e ${Content}`
 EOF
 }

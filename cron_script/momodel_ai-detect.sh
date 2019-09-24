@@ -1,11 +1,11 @@
 #!/bin/bash
 #
-BODY="$(curl -L http://momodel.ai/)"
+BODY="$(curl -L https://momodel.cn/)"
 if echo "${BODY}" | grep "momodel" &> /dev/null; then
-    echo "momodel.ai ok" &> /dev/null
+    echo "momodel.cn ok" &> /dev/null
 else
-    mailx -v -s 'momodel.ai access error' edmunddxu@outlook.com c.lee@livemail.tw << EOF
-`echo "http://momodel.ai/ is blocked"`
+    mailx -v -s 'momodel.cn access error' c.lee@livemail.tw lzfxxx@gmail.com << EOF
+`echo "https://momodel.cn/ is blocked"`
 EOF
 
 fi
